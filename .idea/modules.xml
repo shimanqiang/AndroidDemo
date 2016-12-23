@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AndroidDemo.iml" filepath="$PROJECT_DIR$/AndroidDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/assorted/Assorted.iml" filepath="$PROJECT_DIR$/assorted/Assorted.iml" />
+      <module fileurl="file://$PROJECT_DIR$/notification_demo/notification_demo.iml" filepath="$PROJECT_DIR$/notification_demo/notification_demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/toolkit/toolkit.iml" filepath="$PROJECT_DIR$/toolkit/toolkit.iml" />
+    </modules>
+  </component>
+</project>
