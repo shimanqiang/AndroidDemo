@@ -2,6 +2,8 @@ package com.smq.recyclerview_demo.listview;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -10,6 +12,10 @@ import com.smq.recyclerview_demo.R;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * http://blog.csdn.net/goodchangyong/article/details/51324183
+ * http://www.lcode.org/recyclerview%E5%AE%8C%E5%85%A8%E8%A7%A3%E6%9E%90%E8%AE%A9%E4%BD%A0%E4%BB%8E%E6%AD%A4%E7%88%B1%E4%B8%8Arecyclerview/
+ */
 public class ListViewActivity extends AppCompatActivity {
 
     RecyclerView mRecyclerView;
@@ -37,6 +43,15 @@ public class ListViewActivity extends AppCompatActivity {
          */
         mAdapter = new ListViewAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
+
+
+        /**
+         * 参考：http://blog.csdn.net/lmj623565791/article/details/45059587
+         */
+        //设置Item增加、移除动画
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        //添加分割线
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         /**
          * 初始化数据
