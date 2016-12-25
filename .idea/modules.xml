@@ -12,6 +12,7 @@
       <module fileurl="file://$PROJECT_DIR$/recyclerview_demo/recyclerview_demo.iml" filepath="$PROJECT_DIR$/recyclerview_demo/recyclerview_demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/toolkit/toolkit.iml" filepath="$PROJECT_DIR$/toolkit/toolkit.iml" />
       <module fileurl="file://$PROJECT_DIR$/toolkit/toolkit.iml" filepath="$PROJECT_DIR$/toolkit/toolkit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/weixinhot/weixinhot.iml" filepath="$PROJECT_DIR$/weixinhot/weixinhot.iml" />
     </modules>
   </component>
 </project>
