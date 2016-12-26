@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">微信头条</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>
