@@ -61,7 +61,7 @@ public class LoadDataManager {
     public static void main(String[] args) {
         LoadDataManager.getInstance().generateBannerData(new Callback<List<BannerBean>>() {
             @Override
-            public void onSucess(List<BannerBean> obj) {
+            public void onSuccess(List<BannerBean> obj) {
                 System.out.println(obj.toArray().toString());
             }
         });
@@ -91,7 +91,7 @@ public class LoadDataManager {
                         list.add(bannerBean);
                     }
 
-                    callback.onSucess(list);
+                    callback.onSuccess(list);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -101,6 +101,6 @@ public class LoadDataManager {
     }
 
     public interface Callback<T> {
-        void onSucess(T obj);
+        void onSuccess(T obj);
     }
 }
