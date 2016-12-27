@@ -18,5 +18,9 @@ public class WeiXinHotApplication extends Application {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
+
+        CrashHandler crashHandler = CrashHandler.getInstance();
+        // 注册crashHandler
+        crashHandler.init(context);
     }
 }

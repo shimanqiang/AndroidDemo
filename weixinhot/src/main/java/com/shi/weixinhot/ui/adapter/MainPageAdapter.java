@@ -4,9 +4,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.shi.weixinhot.model.CategoryBean;
+import com.shi.weixinhot.beans.CategoryBean;
 import com.shi.weixinhot.tools.LoadDataManager;
-import com.shi.weixinhot.ui.fragment.PlaceholderFragment;
+import com.shi.weixinhot.ui.fragment.FixFragment;
+import com.shi.weixinhot.ui.fragment.MainFragment;
 
 import java.util.List;
 
@@ -23,7 +24,10 @@ public class MainPageAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return new PlaceholderFragment().newInstance(position);
+        if (position == 0) {
+            return MainFragment.newInstance(mData.get(0));
+        }
+        return FixFragment.newInstance(mData.get(position));
     }
 
     @Override

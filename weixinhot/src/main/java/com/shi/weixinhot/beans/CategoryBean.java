@@ -1,4 +1,4 @@
-package com.shi.weixinhot.model;
+package com.shi.weixinhot.beans;
 
 import java.io.Serializable;
 
