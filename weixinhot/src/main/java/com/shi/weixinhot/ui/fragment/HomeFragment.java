@@ -1,5 +1,10 @@
 package com.shi.weixinhot.ui.fragment;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -8,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +22,24 @@ import android.widget.TextView;
 import com.shi.weixinhot.R;
 import com.shi.weixinhot.beans.CategoryBean;
 import com.shi.weixinhot.beans.ItemBean;
+import com.shi.weixinhot.tools.HttpUtil;
 import com.shi.weixinhot.tools.LoadDataManager;
+import com.shi.weixinhot.tools.LogUtil;
+import com.shi.weixinhot.ui.acvitity.ContentActivity;
 
+import java.io.IOException;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 /**
  * Created by shimanqiang on 16/12/26.
  */
 
-public class MainFragment extends Fragment {
+public class HomeFragment extends Fragment {
+    private final static String TAG = HomeFragment.class.getSimpleName();
+
     public final static String CATEGORY = "category";
 
     private RecyclerView mRecyclerView;
@@ -34,8 +47,8 @@ public class MainFragment extends Fragment {
     private CategoryBean categoryBean;
     private LayoutInflater mInflater;
 
-    public static MainFragment newInstance(CategoryBean categoryBean) {
-        MainFragment fragment = new MainFragment();
+    public static HomeFragment newInstance(CategoryBean categoryBean) {
+        HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
         args.putSerializable(CATEGORY, categoryBean);
         fragment.setArguments(args);
@@ -80,10 +93,10 @@ public class MainFragment extends Fragment {
         LoadDataManager.getInstance().generateFixData(categoryBean.getUrl(), new LoadDataManager.Callback<List<ItemBean>>() {
             @Override
             public void onSuccess(List<ItemBean> obj) {
+                LogUtil.d(TAG, "success:" + obj.toString());
 
-                Log.e("test", "success:" + obj.toString());
                 Message message = mHanler.obtainMessage();
-                message.what = 100;
+                message.what = LOAD_DATA;
                 message.obj = obj;
                 mHanler.sendMessage(message);
 
@@ -92,12 +105,12 @@ public class MainFragment extends Fragment {
 
     }
 
+    private final static int LOAD_DATA = 100; //加载数据
     private Handler mHanler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            Log.e("test2", "dfsdfsdf");
             switch (msg.what) {
-                case 100:
+                case LOAD_DATA:
                     /**
                      * 设置数据到Adapter
                      */
@@ -124,14 +137,20 @@ public class MainFragment extends Fragment {
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
-        ImageView avatar;
-        TextView name;
+        ImageView iv_img;
+        TextView title;
+        TextView author;
+        TextView count;
+        TextView time;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            avatar = (ImageView) itemView.findViewById(R.id.avatar);
-            avatar.setBackgroundResource(android.R.color.holo_red_dark);//TODO
-            name = (TextView) itemView.findViewById(R.id.name);
+            iv_img = (ImageView) itemView.findViewById(R.id.iv_img);
+            //iv_img.setBackgroundResource(android.R.color.holo_red_dark);//TODO
+            title = (TextView) itemView.findViewById(R.id.title);
+            author = (TextView) itemView.findViewById(R.id.author);
+            count = (TextView) itemView.findViewById(R.id.count);
+            time = (TextView) itemView.findViewById(R.id.time);
         }
     }
 
@@ -151,9 +170,29 @@ public class MainFragment extends Fragment {
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             ItemViewHolder newHolder = (ItemViewHolder) holder;
-            ItemBean itemBean = mDatas.get(position);
-            newHolder.name.setText(itemBean.getTitle());
+            final ItemBean itemBean = mDatas.get(position);
+            newHolder.title.setText(itemBean.getTitle());
+            newHolder.author.setText(itemBean.getAuthor());
+            //newHolder.count.setText("1000+");//TODO
+            newHolder.time.setText(itemBean.getAboutTime());
+            /**
+             * 异步加载图标
+             */
+//            asyncLoadImg(itemBean.getImgUrl(), newHolder.iv_img);
+            DownLoadTask downLoadTask = new DownLoadTask(newHolder.iv_img);
+            downLoadTask.execute(itemBean.getImgUrl());
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = itemBean.getUrl();
+                    Intent intent = new Intent(getActivity(), ContentActivity.class);
+                    intent.putExtra("url", url);
+                    startActivity(intent);
+                }
+            });
         }
+
 
         @Override
         public int getItemCount() {
@@ -164,6 +203,61 @@ public class MainFragment extends Fragment {
         public int getItemViewType(int position) {
             return super.getItemViewType(position);
         }
+
+
+        /**
+         * 异步加载图片
+         */
+        class DownLoadTask extends AsyncTask<String, Void, BitmapDrawable> {
+            private ImageView mImageView;
+            String url;
+
+            public DownLoadTask(ImageView imageView) {
+                mImageView = imageView;
+            }
+
+            @Override
+            protected BitmapDrawable doInBackground(String... params) {
+                url = params[0];
+                Bitmap bitmap = downLoadBitmap(url);
+                BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
+                return drawable;
+            }
+
+            private Bitmap downLoadBitmap(String url) {
+                Response response = HttpUtil.executeGetSync(url);
+                return BitmapFactory.decodeStream(response.body().byteStream());
+            }
+
+            @Override
+            protected void onPostExecute(BitmapDrawable drawable) {
+                super.onPostExecute(drawable);
+
+                if (mImageView != null && drawable != null) {
+                    mImageView.setImageDrawable(drawable);
+                }
+            }
+        }
     }
 
+    private void asyncLoadImg(final String url, final ImageView iv_img) {
+        HttpUtil.executePost(url, null, new HttpUtil.ResponseCallBack() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
+                final BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        iv_img.setImageDrawable(drawable);
+                    }
+                });
+            }
+        });
+    }
 }

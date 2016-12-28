@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.shi.weixinhot.beans.CategoryBean;
 import com.shi.weixinhot.tools.LoadDataManager;
 import com.shi.weixinhot.ui.fragment.FixFragment;
-import com.shi.weixinhot.ui.fragment.MainFragment;
+import com.shi.weixinhot.ui.fragment.HomeFragment;
 
 import java.util.List;
 
@@ -15,17 +15,17 @@ import java.util.List;
  * Created by shimanqiang on 16/12/26.
  */
 
-public class MainPageAdapter extends FragmentPagerAdapter {
+public class WeiXinPageAdapter extends FragmentPagerAdapter {
     List<CategoryBean> mData = LoadDataManager.getInstance().generateCategory();
 
-    public MainPageAdapter(FragmentManager fm) {
+    public WeiXinPageAdapter(FragmentManager fm) {
         super(fm);
     }
 
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return MainFragment.newInstance(mData.get(0));
+            return HomeFragment.newInstance(mData.get(0));
         }
         return FixFragment.newInstance(mData.get(position));
     }
