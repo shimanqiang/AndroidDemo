@@ -129,7 +129,7 @@ public class LoadDataManager {
                         itemBean.setAbout(pTxt.text());//
 
                         Element s_p = txtBox.select("div.s-p").first();
-                        itemBean.setAboutTime(s_p.attr("t")); //TODO 时间需要转化
+                        itemBean.setAboutTime(DateUtil.transferStampGap(s_p.attr("t") + "000")); //TODO 时间需要转化：： s_p.attr("t")
 
                         Element account = s_p.select("a.account").first();
                         itemBean.setAuthor(account.text());

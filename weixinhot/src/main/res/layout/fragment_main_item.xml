@@ -17,12 +17,15 @@
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="35dp"
-
             android:layout_marginTop="10dp"
+            android:maxHeight="60dp"
             android:maxLines="3"
+            android:minHeight="40dp"
+            android:textColor="@color/colorContentTitle"
+            android:textSize="15dp"
+            android:textStyle="bold"
             tools:text="大好河山大好河山大好河山大好河山大好河山" />
 
         <LinearLayout
@@ -35,6 +38,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
+                android:minWidth="80dp"
+                android:textSize="10dp"
                 tools:text="Tom" />
 
             <TextView
@@ -50,8 +55,9 @@
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="2dp"
                 android:layout_marginTop="10dp"
+                android:textSize="8dp"
                 tools:text="一小时前" />
         </LinearLayout>
     </LinearLayout>

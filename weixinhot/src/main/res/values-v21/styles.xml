@@ -18,5 +18,7 @@
         <item name="android:windowBackground">@drawable/welcome</item>
         <!--设置activity的window为透明窗口-->
         <item name="android:windowIsTranslucent">true</item>
+        <!--状态栏颜色设置为透明-->
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 </resources>

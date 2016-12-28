@@ -179,6 +179,7 @@ public class HomeFragment extends Fragment {
              * 异步加载图标
              */
 //            asyncLoadImg(itemBean.getImgUrl(), newHolder.iv_img);
+            newHolder.iv_img.setImageResource(R.mipmap.wgtx);
             DownLoadTask downLoadTask = new DownLoadTask(newHolder.iv_img);
             downLoadTask.execute(itemBean.getImgUrl());
 
