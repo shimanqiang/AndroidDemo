@@ -11,18 +11,14 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".ui.acvitity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".ui.acvitity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".ui.acvitity.ContentActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".ui.acvitity.ContentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.DELETE" />
             </intent-filter>
