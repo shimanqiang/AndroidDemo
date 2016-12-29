@@ -64,7 +64,7 @@ public class FixFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_main, container, false);
+        View v = inflater.inflate(R.layout.fragment_home, container, false);
 
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -164,7 +164,7 @@ public class FixFragment extends Fragment {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ItemViewHolder(mInflater.inflate(R.layout.fragment_main_item, parent, false));
+            return new ItemViewHolder(mInflater.inflate(R.layout.fragment_home_item, parent, false));
         }
 
         @Override

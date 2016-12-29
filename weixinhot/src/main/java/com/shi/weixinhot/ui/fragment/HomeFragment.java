@@ -18,7 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.shi.weixinhot.R;
 import com.shi.weixinhot.beans.CategoryBean;
 import com.shi.weixinhot.beans.ItemBean;
@@ -64,7 +66,7 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_main, container, false);
+        View v = inflater.inflate(R.layout.fragment_home, container, false);
 
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -82,8 +84,58 @@ public class HomeFragment extends Fragment {
             initData();
         }
 
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            mRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+//                @Override
+//                public void onScrollChange(View view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//
+//                }
+//            });
+//        }
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (!isLoading && !isNothing && isSlideToBottom(recyclerView)) {
+                    LogUtil.w(TAG, "------->isSlideToBottom:" + isSlideToBottom(recyclerView));
+                    // 显示 loading 状态
+                    // 加载数据
+                    Toast.makeText(getActivity(), "bottom", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+
+
         return v;
     }
+
+    private boolean isLoading = false;//是否正在加载数据
+    private boolean isNothing = false;//是否已经没有更多的数据
+
+    /**
+     * 判断是否在了底部
+     * RecyclerView.canScrollVertically(1)的值表示是否能向上滚动，false表示已经滚动到底部
+     * RecyclerView.canScrollVertically(-1)的值表示是否能向下滚动，false表示已经滚动到顶部
+     *
+     * @param recyclerView
+     * @return
+     */
+    protected boolean isSlideToBottom(RecyclerView recyclerView) {
+        if (recyclerView == null) return false;
+        if (recyclerView.getChildCount() == 0) return false;
+        if (recyclerView.computeVerticalScrollExtent() + recyclerView.computeVerticalScrollOffset() >= recyclerView.computeVerticalScrollRange())
+            return true;
+        return false;
+    }
+
 
     /**
      * 加载数据
@@ -164,7 +216,7 @@ public class HomeFragment extends Fragment {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ItemViewHolder(mInflater.inflate(R.layout.fragment_main_item, parent, false));
+            return new ItemViewHolder(mInflater.inflate(R.layout.fragment_home_item, parent, false));
         }
 
         @Override
@@ -176,12 +228,24 @@ public class HomeFragment extends Fragment {
             //newHolder.count.setText("1000+");//TODO
             newHolder.time.setText(itemBean.getAboutTime());
             /**
-             * 异步加载图标
+             * 异步加载图标（默认的）
+             * newHolder.iv_img.setImageResource(R.mipmap.wgtx);
              */
-//            asyncLoadImg(itemBean.getImgUrl(), newHolder.iv_img);
-            newHolder.iv_img.setImageResource(R.mipmap.wgtx);
-            DownLoadTask downLoadTask = new DownLoadTask(newHolder.iv_img);
-            downLoadTask.execute(itemBean.getImgUrl());
+
+            /**
+             * 第一版
+             * asyncLoadImg(itemBean.getImgUrl(), newHolder.iv_img);
+             */
+            /**
+             * 第二版
+             * DownLoadTask downLoadTask = new DownLoadTask(newHolder.iv_img);
+             * downLoadTask.execute(itemBean.getImgUrl());
+             */
+            /**
+             * 第三版
+             * 使用第三方库 Glide加载图片，太好用了
+             */
+            Glide.with(HomeFragment.this).load(itemBean.getImgUrl()).into(newHolder.iv_img);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -205,40 +269,6 @@ public class HomeFragment extends Fragment {
             return super.getItemViewType(position);
         }
 
-
-        /**
-         * 异步加载图片
-         */
-        class DownLoadTask extends AsyncTask<String, Void, BitmapDrawable> {
-            private ImageView mImageView;
-            String url;
-
-            public DownLoadTask(ImageView imageView) {
-                mImageView = imageView;
-            }
-
-            @Override
-            protected BitmapDrawable doInBackground(String... params) {
-                url = params[0];
-                Bitmap bitmap = downLoadBitmap(url);
-                BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
-                return drawable;
-            }
-
-            private Bitmap downLoadBitmap(String url) {
-                Response response = HttpUtil.executeGetSync(url);
-                return BitmapFactory.decodeStream(response.body().byteStream());
-            }
-
-            @Override
-            protected void onPostExecute(BitmapDrawable drawable) {
-                super.onPostExecute(drawable);
-
-                if (mImageView != null && drawable != null) {
-                    mImageView.setImageDrawable(drawable);
-                }
-            }
-        }
     }
 
     private void asyncLoadImg(final String url, final ImageView iv_img) {
@@ -260,5 +290,39 @@ public class HomeFragment extends Fragment {
                 });
             }
         });
+    }
+
+    /**
+     * 异步加载图片
+     */
+    class DownLoadTask extends AsyncTask<String, Void, BitmapDrawable> {
+        private ImageView mImageView;
+        String url;
+
+        public DownLoadTask(ImageView imageView) {
+            mImageView = imageView;
+        }
+
+        @Override
+        protected BitmapDrawable doInBackground(String... params) {
+            url = params[0];
+            Bitmap bitmap = downLoadBitmap(url);
+            BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
+            return drawable;
+        }
+
+        private Bitmap downLoadBitmap(String url) {
+            Response response = HttpUtil.executeGetSync(url);
+            return BitmapFactory.decodeStream(response.body().byteStream());
+        }
+
+        @Override
+        protected void onPostExecute(BitmapDrawable drawable) {
+            super.onPostExecute(drawable);
+
+            if (mImageView != null && drawable != null) {
+                mImageView.setImageDrawable(drawable);
+            }
+        }
     }
 }
