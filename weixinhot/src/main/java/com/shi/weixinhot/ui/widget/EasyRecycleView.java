@@ -73,7 +73,7 @@ public class EasyRecycleView extends RecyclerView implements View.OnTouchListene
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (!isLoading && isSlideToBottom(recyclerView)) {
-                    if (moveY > 5 && loadingDataListener != null) {
+                    if (moveY > 15 && loadingDataListener != null) {
                         new LoadDataAsyncTask(loadingDataListener).execute();
                     }
                 }
@@ -98,10 +98,16 @@ public class EasyRecycleView extends RecyclerView implements View.OnTouchListene
     }
 
     /**
-     * 下拉加载监听
+     * 上拉加载监听
      */
     private OnLoadingDataListener loadingDataListener;
 
+
+    /**
+     * 设置上拉加载的监听事件的方法
+     *
+     * @param loadingDataListener
+     */
     public void setOnLoadingDataListener(OnLoadingDataListener loadingDataListener) {
         this.loadingDataListener = loadingDataListener;
     }
