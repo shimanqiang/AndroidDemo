@@ -10,14 +10,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.shi.weixinhot.R;
 import com.shi.weixinhot.beans.CategoryBean;
@@ -26,8 +25,9 @@ import com.shi.weixinhot.tools.HttpUtil;
 import com.shi.weixinhot.tools.LoadDataManager;
 import com.shi.weixinhot.tools.LogUtil;
 import com.shi.weixinhot.ui.acvitity.ContentActivity;
-import com.shi.weixinhot.ui.adapter.BaseRecycleViewAdapter;
 import com.shi.weixinhot.ui.adapter.HomeAdapter;
+import com.shi.weixinhot.ui.widget.EasyRecycleView;
+import com.shi.weixinhot.ui.widget.EasyRecycleViewAdapter;
 
 import java.io.IOException;
 import java.util.List;
@@ -44,7 +44,7 @@ public class HomeFragment extends Fragment {
 
     public final static String CATEGORY = "category";
 
-    private RecyclerView mRecyclerView;
+    private EasyRecycleView mRecyclerView;
     //private MyAdapter mAdapter;
     private HomeAdapter mAdapter;
     private CategoryBean categoryBean;
@@ -69,13 +69,14 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        mRecyclerView = (EasyRecycleView) v.findViewById(R.id.recycler_view);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
 
         // mAdapter = new MyAdapter();
         mAdapter = new HomeAdapter(getContext());
-        mAdapter.setOnItemClickListener(new BaseRecycleViewAdapter.OnItemClickListener() {
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setOnItemClickListener(new EasyRecycleViewAdapter.OnItemClickListener() {
             @Override
             public void onClick(View view, int position) {
                 ItemBean itemBean = mAdapter.getData().get(position);
@@ -85,10 +86,8 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
-        mRecyclerView.setAdapter(mAdapter);
         //添加分割线
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        //mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         Bundle args = getArguments();
         if (args != null) {
@@ -106,47 +105,50 @@ public class HomeFragment extends Fragment {
 //            });
 //        }
 
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
+//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                int slop = ViewConfiguration.get(getContext()).getScaledMaximumFlingVelocity();
+//                LogUtil.w(TAG, "------->aaa :" + newState);
+//            }
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                LogUtil.w(TAG, "------->isSlideToBottom :" + dx + "@@@@@@" + dy);
 //                if (!isLoading && !isNothing && isSlideToBottom(recyclerView)) {
-//                    LogUtil.w(TAG, "------->isSlideToBottom:" + isSlideToBottom(recyclerView));
+//                    // LogUtil.w(TAG, "------->isSlideToBottom:" + isSlideToBottom(recyclerView));
 //                    // 显示 loading 状态
 //                    // 加载数据
 //                    //Toast.makeText(getActivity(), "bottom", Toast.LENGTH_SHORT).show();
-//                    int slop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+//                    int slop = ViewConfiguration.get(getContext()).getScaledOverflingDistance();
 //
+//                    LogUtil.w(TAG, "------->isSlideToBottom :" + slop);
 //                    if (slop > 20) {
-//                        LogUtil.e(TAG, "------->isSlideToBottom >>>>>>>:" + isSlideToBottom(recyclerView));
+//                        LogUtil.e(TAG, "------->isSlideToBottom >>>>>>>:" + slop);
 //                        //Toast.makeText(getActivity(), "bottom upup", Toast.LENGTH_SHORT).show();
 //                    }
 //
 //                }
+//            }
+//        });
 
-                int slop = ViewConfiguration.get(getContext()).getScaledMaximumFlingVelocity();
 
-                LogUtil.w(TAG, "------->aaa :" + newState);
+        mRecyclerView.setOnLoadingDataListener(new EasyRecycleView.OnLoadingDataListener<List<ItemBean>>() {
+            @Override
+            public List<ItemBean> onLoading() {
+                String nextUrl = categoryBean.getNextUrl();
+                return LoadDataManager.getInstance().generateFixData(nextUrl);
             }
 
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                LogUtil.w(TAG, "------->isSlideToBottom :" + dx + "@@@@@@" + dy);
-                if (!isLoading && !isNothing && isSlideToBottom(recyclerView)) {
-                    // LogUtil.w(TAG, "------->isSlideToBottom:" + isSlideToBottom(recyclerView));
-                    // 显示 loading 状态
-                    // 加载数据
-                    //Toast.makeText(getActivity(), "bottom", Toast.LENGTH_SHORT).show();
-                    int slop = ViewConfiguration.get(getContext()).getScaledOverflingDistance();
-
-                    LogUtil.w(TAG, "------->isSlideToBottom :" + slop);
-                    if (slop > 20) {
-                        LogUtil.e(TAG, "------->isSlideToBottom >>>>>>>:" + slop);
-                        //Toast.makeText(getActivity(), "bottom upup", Toast.LENGTH_SHORT).show();
-                    }
-
-                }
+            public void onSuccess(List<ItemBean> items) {
+                int currentPos = mAdapter.getData().size();
+                mAdapter.addData2Foot(items);
+                Toast.makeText(getContext(), "加载完毕", Toast.LENGTH_SHORT).show();
+                //layoutManager.scrollToPositionWithOffset(currentPos, 3);
+                layoutManager.scrollToPosition(currentPos + 1);
             }
         });
 

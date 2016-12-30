@@ -105,44 +105,48 @@ public class LoadDataManager {
 
     }
 
+    public List<ItemBean> generateFixData(String url) {
+        List<ItemBean> list = new ArrayList<>();
+        try {
+            LogUtil.e("Jsoup", url);
+            Document doc = Jsoup.connect(url).timeout(5000).get();
+            //Elements liDoms = doc.select("ul.news-list").first().select("li");
+            Elements liDoms = doc.select("body").first().select("li");
+            for (Element li : liDoms) {
+                ItemBean itemBean = new ItemBean();
+
+                Element aDom = li.select("div.img-box>a").first();
+                itemBean.setUrl(aDom.attr("href")); //
+
+                Element img = aDom.select("img").first();
+                itemBean.setImgUrl(img.attr("src"));//
+
+                Elements txtBox = li.select("div.txt-box");
+                Element h3a = txtBox.select("h3>a").first();//
+                itemBean.setTitle(h3a.text());
+                Elements pTxt = txtBox.select("p.txt-info");
+                itemBean.setAbout(pTxt.text());//
+
+                Element s_p = txtBox.select("div.s-p").first();
+                itemBean.setAboutTime(DateUtil.transferStampGap(s_p.attr("t") + "000")); //TODO 时间需要转化：： s_p.attr("t")
+
+                Element account = s_p.select("a.account").first();
+                itemBean.setAuthor(account.text());
+                itemBean.setAuthorLink(account.attr("href"));
+
+                list.add(itemBean);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public void generateFixData(final String url, final LoadDataManager.Callback<List<ItemBean>> callback) {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                try {
-                    List<ItemBean> list = new ArrayList<>();
-                    Document doc = Jsoup.connect(url).timeout(5000).get();
-                    Elements liDoms = doc.select("ul.news-list").first().select("li");
-                    for (Element li : liDoms) {
-                        ItemBean itemBean = new ItemBean();
-
-                        Element aDom = li.select("div.img-box>a").first();
-                        itemBean.setUrl(aDom.attr("href")); //
-
-                        Element img = aDom.select("img").first();
-                        itemBean.setImgUrl(img.attr("src"));//
-
-                        Elements txtBox = li.select("div.txt-box");
-                        Element h3a = txtBox.select("h3>a").first();//
-                        itemBean.setTitle(h3a.text());
-                        Elements pTxt = txtBox.select("p.txt-info");
-                        itemBean.setAbout(pTxt.text());//
-
-                        Element s_p = txtBox.select("div.s-p").first();
-                        itemBean.setAboutTime(DateUtil.transferStampGap(s_p.attr("t") + "000")); //TODO 时间需要转化：： s_p.attr("t")
-
-                        Element account = s_p.select("a.account").first();
-                        itemBean.setAuthor(account.text());
-                        itemBean.setAuthorLink(account.attr("href"));
-
-                        list.add(itemBean);
-                    }
-
-                    callback.onSuccess(list);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                callback.onSuccess(generateFixData(url));
             }
         });
     }

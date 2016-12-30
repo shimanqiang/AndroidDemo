@@ -41,7 +41,7 @@ public class CategoryBean implements Serializable {
          * eg；
          * http://weixin.sogou.com/pcindex/pc/pc_0/1.html   继续加载
          */
-        setIndex(index++);
+        setIndex(getIndex() + 1);
         return BASE_REQUEST_UTL + type + "/" + getIndex() + ".html";
     }
 

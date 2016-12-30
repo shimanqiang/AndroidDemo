@@ -3,20 +3,21 @@ package com.shi.weixinhot.ui.widget;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.shi.weixinhot.tools.LogUtil;
 
 /**
  * Created by shimanqiang on 16/12/29.
  */
 
 public class EasyRecycleView extends RecyclerView implements View.OnTouchListener {
-    /**
-     * Y轴滑动的距离
-     */
-    private float moveY = 0;
+    private static final String TAG = EasyRecycleView.class.getSimpleName();
 
 
     public EasyRecycleView(Context context) {
@@ -29,28 +30,45 @@ public class EasyRecycleView extends RecyclerView implements View.OnTouchListene
 
     public EasyRecycleView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        /**
+         * 设置Touch监听器
+         */
+        setOnTouchListener(this);
+        /**
+         * 设置Item增加、移除动画
+         */
+        setItemAnimator(new DefaultItemAnimator());
+        /**
+         * 设置默认的分割线
+         */
+        addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
+
+    /**
+     * Y轴滑动的距离计算
+     */
+    private float moveY = 0;
+    private float downY = 0;
 
     @Override
     public boolean onTouch(View view, MotionEvent event) {
-        float downY = 0;
-
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
+                moveY = 0;
                 downY = event.getY();//float DownY
                 break;
             case MotionEvent.ACTION_MOVE:
                 moveY = event.getY() - downY;//y轴距离
                 break;
             case MotionEvent.ACTION_UP:
-                moveY = 0;
                 break;
         }
         /**
          * 返回 false事件会继续传递
          * 返回 true 事件不会继续传递
          */
-        return false;
+        //return false;
+        return super.onTouchEvent(event);
     }
 
 
@@ -61,25 +79,6 @@ public class EasyRecycleView extends RecyclerView implements View.OnTouchListene
      */
     private boolean isLoading = false;//是否正在加载数据
 
-    @Override
-    public void addOnScrollListener(RecyclerView.OnScrollListener listener) {
-        super.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (!isLoading && isSlideToBottom(recyclerView)) {
-                    if (moveY > 15 && loadingDataListener != null) {
-                        new LoadDataAsyncTask(loadingDataListener).execute();
-                    }
-                }
-            }
-        });
-    }
 
     /**
      * 判断是否在了底部
@@ -106,16 +105,39 @@ public class EasyRecycleView extends RecyclerView implements View.OnTouchListene
     /**
      * 设置上拉加载的监听事件的方法
      *
-     * @param loadingDataListener
+     * @param listener
      */
-    public void setOnLoadingDataListener(OnLoadingDataListener loadingDataListener) {
-        this.loadingDataListener = loadingDataListener;
+    public void setOnLoadingDataListener(OnLoadingDataListener listener) {
+        this.loadingDataListener = listener;
+        super.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (!isLoading && isSlideToBottom(recyclerView)) {
+//                    if (loadingDataListener != null) {
+//                        new LoadDataAsyncTask(loadingDataListener).execute();
+//                    }
+                    LogUtil.e(TAG, "moveY:" + moveY);
+                    if (-moveY > 300 && loadingDataListener != null) {
+                        new LoadDataAsyncTask(loadingDataListener).execute();
+                    }
+//                    EasyRecycleViewAdapter adapter = (EasyRecycleViewAdapter) getAdapter();
+//                    adapter.getHeadView().itemView.getMeasuredHeight();
+                }
+            }
+        });
     }
 
-    interface OnLoadingDataListener {
-        void onLoading();
+    public interface OnLoadingDataListener<T> {
+        T onLoading();
 
-        void onSuccess();
+        void onSuccess(T items);
     }
 
 
@@ -161,7 +183,7 @@ public class EasyRecycleView extends RecyclerView implements View.OnTouchListene
     /**
      * 加载数据的Task
      */
-    class LoadDataAsyncTask extends AsyncTask<Void, Void, Boolean> {
+    class LoadDataAsyncTask extends AsyncTask<Void, Void, Object> {
         private OnLoadingDataListener loadingDataListener;
 
         public LoadDataAsyncTask(OnLoadingDataListener loadingDataListener) {
@@ -169,16 +191,15 @@ public class EasyRecycleView extends RecyclerView implements View.OnTouchListene
         }
 
         @Override
-        protected Boolean doInBackground(Void... voids) {
+        protected Object doInBackground(Void... voids) {
             isLoading = true;
-            loadingDataListener.onLoading();
-            return true;
+            return loadingDataListener.onLoading();
         }
 
         @Override
-        protected void onPostExecute(Boolean b) {
+        protected void onPostExecute(Object obj) {
             isLoading = false;
-            loadingDataListener.onSuccess();
+            loadingDataListener.onSuccess(obj);
         }
     }
 

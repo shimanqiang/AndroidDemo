@@ -68,6 +68,7 @@ public abstract class EasyRecycleViewAdapter<T> extends RecyclerView.Adapter {
                 mData.add(item);
             }
         }
+        notifyDataSetChanged();
     }
 
     /**
@@ -77,6 +78,11 @@ public abstract class EasyRecycleViewAdapter<T> extends RecyclerView.Adapter {
      */
     public void addData2First(T data) {
         mData.addFirst(data);
+        if (headViewHoler != null) {
+            notifyItemInserted(1);
+        } else {
+            notifyItemInserted(0);
+        }
     }
 
     /**
@@ -88,6 +94,11 @@ public abstract class EasyRecycleViewAdapter<T> extends RecyclerView.Adapter {
         for (T item : data) {
             mData.addFirst(item);
         }
+        if (headViewHoler != null) {
+            notifyItemRangeInserted(1, data.size());
+        } else {
+            notifyItemRangeInserted(0, data.size());
+        }
     }
 
     /**
@@ -97,6 +108,11 @@ public abstract class EasyRecycleViewAdapter<T> extends RecyclerView.Adapter {
      */
     public void addData2Foot(T data) {
         mData.add(data);
+        if (headViewHoler != null) {
+            notifyItemInserted(mData.size());
+        } else {
+            notifyItemInserted(mData.size() - 1);
+        }
     }
 
     /**
@@ -106,6 +122,11 @@ public abstract class EasyRecycleViewAdapter<T> extends RecyclerView.Adapter {
      */
     public void addData2Foot(List<T> data) {
         mData.addAll(data);
+        if (headViewHoler != null) {
+            notifyItemRangeInserted(mData.size(), data.size());
+        } else {
+            notifyItemRangeInserted(mData.size() - 1, data.size());
+        }
     }
 
 

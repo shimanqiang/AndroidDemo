@@ -10,26 +10,25 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.shi.weixinhot.R;
 import com.shi.weixinhot.beans.ItemBean;
-import com.shi.weixinhot.ui.widget.EasyRecycleViewAdapter;
 
 /**
  * Created by shimanqiang on 16/12/29.
  */
 
-public class HomeAdapter extends EasyRecycleViewAdapter<ItemBean> {
+public class HomeAdapter3 extends BaseRecycleViewAdapter<ItemBean> {
 
-    public HomeAdapter(Context context) {
+    public HomeAdapter3(Context context) {
         super(context);
     }
 
     @Override
     protected RecyclerView.ViewHolder onCreateViewHolder$(ViewGroup parent, int viewType) {
-        return new HomeAdapter.ItemViewHolder(mInflater.inflate(R.layout.fragment_home_item, parent, false));
+        return new HomeAdapter3.ItemViewHolder(mInflater.inflate(R.layout.fragment_home_item, parent, false));
     }
 
     @Override
     protected void onBindViewHolder$(RecyclerView.ViewHolder holder, int position) {
-        HomeAdapter.ItemViewHolder newHolder = (HomeAdapter.ItemViewHolder) holder;
+        HomeAdapter3.ItemViewHolder newHolder = (HomeAdapter3.ItemViewHolder) holder;
         final ItemBean itemBean = getData().get(position);
         newHolder.title.setText(itemBean.getTitle());
         newHolder.author.setText(itemBean.getAuthor());
