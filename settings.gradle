@@ -1,1 +1,1 @@
-include ':assorted', ':toolkit', ':notification_demo', ':recyclerview_demo', ':weixinhot', ':hi_demo'
+include ':assorted', ':toolkit', ':notification_demo', ':recyclerview_demo', ':weixinhot', ':hi_demo', ':annotationdemo'
