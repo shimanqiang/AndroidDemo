@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <!--剩余时间：remaining_time-->
+        <variable
+            name="remainingTime"
+            type="String" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/activity_start"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--scaleType="fitXY" 把图片不按比例扩大/缩小到View的大小显示 -->
+
+        <ImageView
+            android:id="@+id/iv_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/b_1"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/tv_jump"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/shape_jump"
+            android:gravity="center"
+            android:text="@{@string/activity_start_jump + remainingTime}"
+            android:textColor="@color/colorWhite"
+            android:textSize="16sp"
+            tools:text="@string/activity_start_jump" />
+
+    </RelativeLayout>
+</layout>
