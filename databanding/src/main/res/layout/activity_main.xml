@@ -11,18 +11,8 @@
             type="User" />
     </data>-->
 
-   <!-- <data>
+    <data>
 
-        <import
-            alias="User2"
-            type="com.smq.databanding.User" />
-
-        <variable
-            name="user"
-            type="User2" />
-    </data>-->
-
-    <data class="com.smq.databanding.MainBanding" >
         <import
             alias="User2"
             type="com.smq.databanding.User" />
@@ -31,6 +21,16 @@
             name="user"
             type="User2" />
     </data>
+
+    <!--<data class="com.smq.databanding.MainBanding" >
+        <import
+            alias="User2"
+            type="com.smq.databanding.User" />
+
+        <variable
+            name="user"
+            type="User2" />
+    </data>-->
 
 
     <RelativeLayout

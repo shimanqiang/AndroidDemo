@@ -1,0 +1,31 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_project_home"
+        android:icon="@mipmap/ic_launcher"
+        android:title="项目主页" />
+    <item
+        android:id="@+id/menu_down"
+        android:icon="@mipmap/ic_launcher"
+        android:title="扫码下载" />
+    <item
+        android:id="@+id/menu_upgrade"
+        android:icon="@mipmap/ic_launcher"
+        android:title="检查更新" />
+
+    <!--
+    如果我想在NavigationView的item之间添加上一条分隔线呢？很简单，
+    只需要在menu中将相应的item放到一个group中，并给该group取一个id即可
+    -->
+    <group android:id="@+id/group1">
+        <item
+            android:id="@+id/menu_about"
+            android:icon="@mipmap/ic_launcher"
+            android:title="关于" />
+        <item
+            android:id="@+id/menu_call_me"
+            android:icon="@mipmap/ic_launcher"
+            android:title="联系我" />
+    </group>
+</menu>

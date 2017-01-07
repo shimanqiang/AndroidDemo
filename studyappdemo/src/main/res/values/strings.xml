@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">StudyAppDemo</string>
+    <string name="app_name">学习Demo</string>
 
     <string name="activity_start_jump">跳过</string>
 </resources>

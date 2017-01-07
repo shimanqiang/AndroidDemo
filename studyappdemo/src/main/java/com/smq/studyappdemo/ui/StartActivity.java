@@ -1,4 +1,4 @@
-package com.smq.studyappdemo;
+package com.smq.studyappdemo.ui;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.smq.studyappdemo.R;
 import com.smq.studyappdemo.databinding.ActivityStartBinding;
 
 public class StartActivity extends AppCompatActivity {
@@ -63,8 +64,8 @@ public class StartActivity extends AppCompatActivity {
      * @return
      */
     private int getRandomBackgroundImage() {
-        int[] imgs = {R.drawable.b_1, R.drawable.b_2,
-                R.drawable.b_3, R.drawable.b_4, R.drawable.b_5, R.drawable.b_6};
+        int[] imgs = {R.mipmap.b_1, R.mipmap.b_2,
+                R.mipmap.b_3, R.mipmap.b_4, R.mipmap.b_5, R.mipmap.b_6};
         int index = (int) Math.floor(Math.random() * imgs.length);
         //int i = new Random().nextInt(imgs.length);
         return imgs[index];
