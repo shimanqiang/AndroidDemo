@@ -24,21 +24,80 @@
 
                 <FrameLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp">
 
                     <ImageView
                         android:id="@+id/titlebar_meanu"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:src="@mipmap/titlebar_menu" />
                 </FrameLayout>
 
+                <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+                    <!--
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    设置selectableItemBackgroundBorderless后，会从孩子往父亲找一个依附的色
+                    -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="55dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/titlebar_music" />
+
+                        <ImageView
+                            android:layout_width="55dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/titlebar_disco" />
+
+                        <ImageView
+                            android:layout_width="55dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/titlebar_friends" />
+
+                    </LinearLayout>
+
+                </HorizontalScrollView>
+
             </android.support.v7.widget.Toolbar>
 
-        </android.support.design.widget.AppBarLayout>
 
-        <!--TODO -->
+        </android.support.design.widget.AppBarLayout>
+        <!--
+             //viewgroup会覆盖子类控件而直接获得焦点
+             android:descendantFocusability="blocksDescendants
+             //不遮挡 toolbar
+             app:layout_behavior="@string/appbar_scrolling_view_behavior"
+         -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/view_pager_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFFFFFF"
+                android:descendantFocusability="blocksDescendants" />
+
+        </FrameLayout>
 
     </android.support.design.widget.CoordinatorLayout>
 </layout>

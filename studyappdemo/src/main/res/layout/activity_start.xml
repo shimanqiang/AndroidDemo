@@ -34,7 +34,7 @@
             android:background="@drawable/shape_jump"
             android:gravity="center"
             android:text="@{@string/activity_start_jump + remainingTime}"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/white"
             android:textSize="16sp"
             tools:text="@string/activity_start_jump" />
 
