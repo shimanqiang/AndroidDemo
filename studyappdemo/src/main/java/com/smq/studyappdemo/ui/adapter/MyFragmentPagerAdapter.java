@@ -3,6 +3,7 @@ package com.smq.studyappdemo.ui.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.text.TextUtils;
 
 import com.smq.studyappdemo.beans.TitleFragmentBean;
 
@@ -28,5 +29,15 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return data.size();
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        String title = data.get(position).getTitle();
+        if (TextUtils.isEmpty(title)) {
+            //return super.getPageTitle(position);
+            return null;
+        }
+        return title;
     }
 }

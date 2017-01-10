@@ -8,6 +8,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -17,9 +18,17 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.smq.studyappdemo.R;
+import com.smq.studyappdemo.beans.TitleFragmentBean;
 import com.smq.studyappdemo.databinding.ActivityMainBinding;
+import com.smq.studyappdemo.ui.adapter.MyFragmentPagerAdapter;
+import com.smq.studyappdemo.ui.view.BookFragment;
+import com.smq.studyappdemo.ui.view.GankFragment;
+import com.smq.studyappdemo.ui.view.OneFragment;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
     private ActivityMainBinding mainBinding;
 
@@ -35,6 +44,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initEvent();
 
         initDrawerLayout();
+
+        attachFragment();
+    }
+
+    private void attachFragment() {
+        //数据Fragmeng
+        List<TitleFragmentBean> data = new ArrayList<>();
+        data.add(new TitleFragmentBean("", new GankFragment()));
+        data.add(new TitleFragmentBean("", new OneFragment()));
+        data.add(new TitleFragmentBean("", new BookFragment()));
+
+        //ViewPager对象
+        ViewPager viewPagerContent = mainBinding.include.viewPagerContent;
+        //适配器
+        MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), data);
+        viewPagerContent.setAdapter(adapter);
+        //viewPagerContent.setOffscreenPageLimit(3);
+
+        //选择第一个导航页
+        currentSelectedTab = mainBinding.include.barTitleMusic;
+        currentSelectedTab.setSelected(true);
+        viewPagerContent.setCurrentItem(0);
+
+        viewPagerContent.addOnPageChangeListener(this);
+
+
     }
 
 
@@ -116,4 +151,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+
+    private ImageView currentSelectedTab;
+
+    @Override
+    public void onPageSelected(int position) {
+        if (currentSelectedTab == null) {
+            return;
+        }
+        currentSelectedTab.setSelected(false);
+        switch (position) {
+            case 0:
+                currentSelectedTab = mainBinding.include.barTitleMusic;
+                break;
+            case 1:
+                currentSelectedTab = mainBinding.include.barTitleDisco;
+                break;
+            case 2:
+                currentSelectedTab = mainBinding.include.barTitleFriends;
+                break;
+        }
+        currentSelectedTab.setSelected(true);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
 }

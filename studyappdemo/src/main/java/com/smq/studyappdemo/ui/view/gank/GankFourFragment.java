@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.smq.studyappdemo.R;
 
 
-public class GankTwoFragment extends Fragment {
+public class GankFourFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -20,7 +20,7 @@ public class GankTwoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_gank_two, container, false);
+        return inflater.inflate(R.layout.fragment_gank_four, container, false);
     }
 
 

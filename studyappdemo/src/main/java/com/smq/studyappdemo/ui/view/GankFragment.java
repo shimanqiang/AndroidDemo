@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 import com.smq.studyappdemo.R;
 import com.smq.studyappdemo.beans.TitleFragmentBean;
 import com.smq.studyappdemo.ui.adapter.MyFragmentPagerAdapter;
+import com.smq.studyappdemo.ui.view.gank.GankFourFragment;
 import com.smq.studyappdemo.ui.view.gank.GankOneFragment;
+import com.smq.studyappdemo.ui.view.gank.GankThreeFragment;
 import com.smq.studyappdemo.ui.view.gank.GankTwoFragment;
 
 import java.util.ArrayList;
@@ -33,6 +35,12 @@ public class GankFragment extends BaseFragment {
     private TabLayout mTabLayout;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initFragmentData();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -47,8 +55,6 @@ public class GankFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
-
-        initFragmentData();
 
         //
         MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getChildFragmentManager(), data);
@@ -68,7 +74,9 @@ public class GankFragment extends BaseFragment {
 
 
     private void initFragmentData() {
-        data.add(new TitleFragmentBean("大安卓", new GankOneFragment()));
-        data.add(new TitleFragmentBean("一线天", new GankTwoFragment()));
+        data.add(new TitleFragmentBean("每日推荐", new GankOneFragment()));
+        data.add(new TitleFragmentBean("福利", new GankTwoFragment()));
+        data.add(new TitleFragmentBean("干活定制", new GankThreeFragment()));
+        data.add(new TitleFragmentBean("大安卓", new GankFourFragment()));
     }
 }

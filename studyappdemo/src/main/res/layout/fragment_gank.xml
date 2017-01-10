@@ -12,10 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@color/white"
-        app:tabBackground="@color/colorAccent"
+        app:tabBackground="@color/white"
         app:tabIndicatorColor="@color/colorPrimary"
         app:tabSelectedTextColor="@color/colorPrimary"
-        app:tabTextColor="@color/black">
+        app:tabTextColor="@color/gray">
 
     </android.support.design.widget.TabLayout>
 
