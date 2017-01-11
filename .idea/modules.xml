@@ -9,6 +9,8 @@
       <module fileurl="file://$PROJECT_DIR$/hi_demo/hi_demo.iml" filepath="$PROJECT_DIR$/hi_demo/hi_demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/notification_demo/notification_demo.iml" filepath="$PROJECT_DIR$/notification_demo/notification_demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/recyclerview_demo/recyclerview_demo.iml" filepath="$PROJECT_DIR$/recyclerview_demo/recyclerview_demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/retrofit2/retrofit2.iml" filepath="$PROJECT_DIR$/retrofit2/retrofit2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rxandroid/rxandroid.iml" filepath="$PROJECT_DIR$/rxandroid/rxandroid.iml" />
       <module fileurl="file://$PROJECT_DIR$/studyappdemo/studyappdemo.iml" filepath="$PROJECT_DIR$/studyappdemo/studyappdemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/toolkit/toolkit.iml" filepath="$PROJECT_DIR$/toolkit/toolkit.iml" />
       <module fileurl="file://$PROJECT_DIR$/weixinhot/weixinhot.iml" filepath="$PROJECT_DIR$/weixinhot/weixinhot.iml" />

@@ -1,0 +1,17 @@
+package com.smq.retrofit2;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+/**
+ * https://api.github.com/users/shimanqiang/repos
+ *
+ */
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+}
